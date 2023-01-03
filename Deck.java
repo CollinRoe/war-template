@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Deck
 {
-    private List<Card> cards;
+    public List<Card> cards;
 
     /**
      * Deck constructor: Create an empty deck of cards
@@ -17,6 +17,7 @@ public class Deck
     public Deck()
     {
         cards = new ArrayList<Card>();
+        initializeNewDeck();
     }
     
     public void initializeNewDeck() {
@@ -44,9 +45,27 @@ public class Deck
      * Shuffles the cards in the deck
      */
     public void shuffle() {
-        // To be written
+        // One array of cards and one of index that will be removed to ensure a number is not choosen w
+        ArrayList<Card> shuffledCard = new ArrayList<Card>();
+        ArrayList<Integer> deck = new ArrayList<Integer>();
+
+        for (int i = 0; i < getDeckSize(); ++i) {
+            deck.add(i);
+        }
+
+        ArrayList<Integer> shuffledDeck = new ArrayList<Integer>();
+
+        while (deck.size() > 0) {
+            int index = (int) (Math.random() * deck.size());
+            shuffledDeck.add(deck.remove(index));
+            shuffledCard.add(this.cards.get(index));
+        }
+
+        this.cards = shuffledCard;
+        //System.out.println(cards.toString());
     }
     
+
     /**
      * Deal all the cards in the deck to make two new decks of cards
      * 
@@ -69,8 +88,10 @@ public class Deck
      * @returns The top card of the deck (at cards index 0)
      */
     public Card dealCardFromDeck() {
-        // To be written 
-        return null;
+        Card dealCard = cards.get(0);
+        
+        this.cards.remove(0);
+        return dealCard;
     }
     
     /**
@@ -78,7 +99,7 @@ public class Deck
      * @param cardToAdd: Card to add to this deck
      */
     public void addCardToDeck(Card cardToAdd) {
-        // To be written
+        this.cards.add(cardToAdd);
     }
     
 }
