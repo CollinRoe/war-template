@@ -38,7 +38,7 @@ public class War
         // Shuffle Deck
         this.warDeck.shuffle();
         
-        // Deal the Decks - this is bad somehow
+        // Deal the Decks - this is bad becuase there are too many cards delt
         //Deck[] deltDecks = this.warDeck.dealDeck();
         // Associate Decks with players
         //player0 = deltDecks[0];
@@ -51,14 +51,15 @@ public class War
         player1 = new Deck();
         player1.shuffle();
         
-        
-        while (player0.getDeckSize() >= 1 && player1.getDeckSize() >= 1)
+        // Loop until one player has no cards
+        while (player0.getDeckSize() > 0 && player1.getDeckSize() > 0)
         {
-
+            // Flip top cards for each player
             Card topCard0 = player0.dealCardFromDeck();
             Card topCard1 = player1.dealCardFromDeck();
             
-            // Comapre top cords - war or choose a winner
+            // Comapres top cards 
+            //goes to war or choose a winner - code in method below
             this.CompareCards(topCard0, topCard1);
 
 
@@ -79,52 +80,71 @@ public class War
     {
             if (topCard0.getRank() == topCard1.getRank())
             {
-                // THIS IS WAR
+                // THIS IS WAR - code in method below
                 System.out.println("WAR " + topCard1.getFace() + topCard1.getSuit() +" = "+ topCard0.getFace() + topCard0.getSuit());
                 War(topCard0, topCard1);
             }
             if (topCard0.getRank() < topCard1.getRank())
             {
-                // Player 1 WINS
+                // Player 1 WINS - gets top cards
                 System.out.println("PLAYER 1 WINS! " + topCard1.getFace() + topCard1.getSuit() +" > "+ topCard0.getFace() + topCard0.getSuit());
                 this.player1.addCardToDeck(topCard1);
                 this.player1.addCardToDeck(topCard0);
             }
             else if (topCard0.getRank() > topCard1.getRank())
             {
-                // Player 0 WINS
+                // Player 0 WINS - gets top cards
                 System.out.println("PLAYER 0 WINS! "+ topCard0.getFace() + topCard0.getSuit() +" > "+ topCard1.getFace() + topCard1.getSuit());
                 this.player0.addCardToDeck(topCard1);
                 this.player0.addCardToDeck(topCard0);
             }
     }
     
-    private void War (Card topCard0, Card topCard1)
+    private String War (Card topCard0, Card topCard1)
     {
         try
         {
-        // Get 3 cards from each player
-                Card player0War1 = player0.dealCardFromDeck();
-                Card player1War1 = player1.dealCardFromDeck();
-                Card player0War2 = player0.dealCardFromDeck();
-                Card player1War2 = player1.dealCardFromDeck();
-                Card player0War3 = player0.dealCardFromDeck();
-                Card player1War3 = player1.dealCardFromDeck();
+            // Get 3 cards from each player
+            Card player0War1 = player0.dealCardFromDeck();
+            Card player1War1 = player1.dealCardFromDeck();
+            Card player0War2 = player0.dealCardFromDeck();
+            Card player1War2 = player1.dealCardFromDeck();
+            Card player0War3 = player0.dealCardFromDeck();
+            Card player1War3 = player1.dealCardFromDeck();
                 
-                // Get Compare Cards
-                Card player0War4 = player0.dealCardFromDeck();
-                Card player1War4 = player1.dealCardFromDeck();
-                
-                if (player0War4.getRank() == player1War4.getRank())
-                {
-                    //This is a War in a War
-                    System.out.println("WAR IN A WAR " + player1War4.getFace() + player1War4.getSuit() +" = "+ player0War4.getFace() + player0War4.getSuit());
-                 War(player0War4, player1War4);
-                }
+            // Get War Compare Cards
+            Card player0War4 = player0.dealCardFromDeck();
+            Card player1War4 = player1.dealCardFromDeck();
+            
+            // Record the winner in case there is a war in a war
+            String warWinner = "";
+
             if (player0War4.getRank() < player1War4.getRank())
             {
                 // Player 1 WINS
                 System.out.println("WAR - PLAYER 1 WINS! "+ player1War4.getFace() + player1War4.getSuit() +" > "+ player0War4.getFace() + player0War4.getSuit());
+                warWinner = "PLAYER1";
+            }
+            else if (player0War4.getRank() > player1War4.getRank())
+            {
+                // Player 0 WINS
+                System.out.println("WAR - PLAYER 0 WINS! "+ player0War4.getFace() + player0War4.getSuit() +" > "+ player1War4.getFace() + player1War4.getSuit());
+                warWinner = "PLAYER0";
+            }
+        
+            if (player0War4.getRank() == player1War4.getRank())
+            {
+                //This is a War in a War
+                System.out.println("WAR IN A WAR " + player1War4.getFace() + player1War4.getSuit() +" = "+ player0War4.getFace() + player0War4.getSuit());
+                //gets the winner of this war so we can assign the cards from the past war
+                warWinner = War(player0War4, player1War4);
+            }
+            
+              if (warWinner == "PLAYER1") 
+              {
+                // Player 1 WINS and gets all of the cards in this war
+                this.player1.addCardToDeck(topCard0);
+                this.player1.addCardToDeck(topCard1);
                 this.player1.addCardToDeck(player0War1);
                 this.player1.addCardToDeck(player1War1);
                 this.player1.addCardToDeck(player0War2);
@@ -134,10 +154,11 @@ public class War
                 this.player1.addCardToDeck(player0War4);
                 this.player1.addCardToDeck(player1War4);
             }
-            else if (player0War4.getRank() > player1War4.getRank())
+            else if (warWinner == "PLAYER0") 
             {
-                // Player 0 WINS
-                System.out.println("WAR - PLAYER 0 WINS! "+ player0War4.getFace() + player0War4.getSuit() +" > "+ player1War4.getFace() + player1War4.getSuit());
+                // Player 0 WINS and gets all of the cards in this war
+                this.player0.addCardToDeck(topCard0);
+                this.player0.addCardToDeck(topCard1);
                 this.player0.addCardToDeck(player0War1);
                 this.player0.addCardToDeck(player1War1);
                 this.player0.addCardToDeck(player0War2);
@@ -147,9 +168,16 @@ public class War
                 this.player0.addCardToDeck(player0War4);
                 this.player0.addCardToDeck(player1War4);
             }
+            
+            // Pass the winner up to the previous War calls
+            // This means that all cards in this war will go to the winner
+            return warWinner;
         }
         catch(Exception e)
-        {return;}
+        {
+            //returns if player does not have enough cards to finish the war
+            return "";
+        }
     }
     
     /**
