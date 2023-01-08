@@ -83,13 +83,13 @@ public class War
         if (topCard0.getRank() < topCard1.getRank())
         {
             // Player 1 WINS
-            System.out.println("WAR - PLAYER 1 WINS! "+ topCard1.getFace() + topCard1.getSuit() +" > "+ topCard0.getFace() + topCard0.getSuit());
+            System.out.println("PLAYER 1 WINS! "+ topCard1.getFace() + topCard1.getSuit() +" > "+ topCard0.getFace() + topCard0.getSuit());
             warWinner = "PLAYER1";
         }
         else if (topCard0.getRank() > topCard1.getRank())
         {
             // Player 0 WINS
-            System.out.println("WAR - PLAYER 0 WINS! "+ topCard0.getFace() + topCard0.getSuit() +" > "+ topCard1.getFace() + topCard1.getSuit());
+            System.out.println("PLAYER 0 WINS! "+ topCard0.getFace() + topCard0.getSuit() +" > "+ topCard1.getFace() + topCard1.getSuit());
             warWinner = "PLAYER0";
         }
         else if (topCard0.getRank() == topCard1.getRank())
@@ -126,11 +126,21 @@ public class War
             // Player 0 does not have enough cards for war = Player 1 wins
             if (player0.getDeckSize() <= 4)
             {
+                while (player0.getDeckSize() > 0) 
+                {
+                    Card card = player0.dealCardFromDeck();
+                    this.player1.addCardToDeck(card);
+                }
                 return "PLAYER1";
             }
             // Player 1 does not have enough cards for war = Player 0 wins
             if (player1.getDeckSize() <= 4)
             {
+                while (player1.getDeckSize() > 0) 
+                {
+                    Card card = player1.dealCardFromDeck();
+                    this.player0.addCardToDeck(card);
+                }
                 return "PLAYER0";
             }
             
